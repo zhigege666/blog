@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>转换</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no">
+	<script src="js/jquery.min.2.1.4.js"></script>
+	<link rel="stylesheet" href="css/bootstrap.3.3.4.css">
+	<script src="js/apexcharts.js"></script>
+	<script>
+		//各个屏幕大小适配
+		(function (doc, win) {
+			var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+				recalc = function () {
+					var clientWidth = docEl.clientWidth;
+					if (!clientWidth) return;
+					docEl.style.fontSize = 100 * (clientWidth / 375) + 'px';
+				};
+
+			if (!doc.addEventListener) return;
+			win.addEventListener(resizeEvt, recalc, false);
+			doc.addEventListener('DOMContentLoaded', recalc, false);
+		})(document, window);
+	</script>
+</head>
+
+<style>
+	html{
+		margin: 0;
+		padding: 0;
+	}
+	#wrapper {
+		padding-top: 20px;
+		background: #000524;
+		border: 1px solid #000;
+		box-shadow: 0 22px 35px -16px rgba(0, 0, 0, 0.71);
+		max-width: 650px;
+		margin: 35px auto;
+	}
+</style>
+
+<body>
+	<div class="page-header">
+		<h3 class="text-center">自动获取分数</h3>
+	</div>
+	<form id="testForm" class="form-horizontal">
+		<div class="form-group" style=" margin-right: 0;                      margin-left: 0; ">
+			<label class="col-md-3 control-label">获取分数</label>
+			<div class="col-md-6">
+				<textarea id='iputtext' class="form-control" name="test" rows="3"></textarea>
+
+			</div>
+		</div>
+		<div class="form-group" style=" margin-right: 0;                      margin-left: 0; ">
+			<div class="col-md-offset-3 col-md-6">
+				<button type="button" class="btn btn-info" id="testConfirm" onclick="fun()">确定</button>
+			</div>
+		</div>
+		<div class="form-group" style=" margin-right: 0;                      margin-left: 0; ">
+			<label class="col-md-3 control-label">结果</label>
+			<div class="col-md-6">
+				<textarea id='iputtext1' class="form-control" name="test" rows="7"></textarea>
+
+			</div>
+		</div>
+	</form>
+
+	<div id="wrapper">
+		<div id="chart-area">
+		</div>
+	</div>
+
+
+
+	<script>
+		$('#wrapper').hide()
+		function fun() {
+			const data = getMapData($('#iputtext').val())
+			// $.ajax({
+			// 	url: 'https://api.1996wz.cn/api/Text/post',
+			// 	type: 'post',
+			// 	headers: {
+			// 		'Content-Type': 'application/x-www-form-urlencoded',
+			// 	},
+			// 	dataType: 'json',
+			// 	async: false,
+			// 	data: {
+			// 		'': $('#iputtext').val()
+			// 	},
+			// 	success: function (data) {
+					//服务器返回响应，根据响应结果，分析是否登录成功；
+					console.log(data);
+					var max=data[0][1];
+					var min=data[0][1];
+					var h='\r\n';
+					data.forEach(element => {
+						h=h+'第'+element[0]+'次:'+element[1]+';';
+						if(element[1]>max)
+						max=element[1];
+						if(element[1]<min)
+					min=element[1];
+					});
+					h='最大值：'+max+';最小值：'+min+';差值：'+(max-min) +h;
+					$('#iputtext1').val(h)
+					$('#chart-area').html()
+					$('#wrapper').show()
+					var options1 = {
+						chart: {
+							id: "chart2",
+							type: "area",
+							height: 230,
+							foreColor: "#ccc",
+							toolbar: {
+								autoSelected: "pan",
+								show: false
+							}
+						},
+						colors: ["#00BAEC"],
+						stroke: {
+							width: 3
+						},
+						grid: {
+							borderColor: "#555",
+							yaxis: {
+								lines: {
+									show: false
+								}
+							}
+						},
+						dataLabels: {
+							enabled: false
+						},
+						fill: {
+							gradient: {
+								enabled: true,
+								opacityFrom: 0.55,
+								opacityTo: 0
+							}
+						},
+						markers: {
+							size: 3,
+							colors: ["#000524"],
+							strokeColor: "#00BAEC",
+							strokeWidth: 3
+						},
+						series: [
+							{
+								label:{
+									normal:{
+										show:true,
+										position:"top"
+									}
+								},
+								data: data
+							}
+						],
+						tooltip: {
+							theme: "dark"
+						},
+						xaxis: {
+							type: "int"
+						},
+						yaxis: {
+							min: min,
+							max:max,
+							tickAmount: 9
+						}
+					};
+
+					var chart1 = new ApexCharts(document.querySelector("#chart-area"), options1);
+
+					chart1.render();
+
+
+
+			// 	},
+			// 	error: function (xhr, type, errorThrown) {
+
+			// 		//						alert('网络异常')
+			// 		console.log(type);
+
+			// 	}
+			// });
+		}
+
+	</script>
+</body>
+
+</html>
