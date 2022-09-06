@@ -10,5 +10,5 @@ function loadJs(url, callback) {
 		}
 	} script.src = url; 
 	document.body.appendChild(script)
-} loadJs('//api.1996wz.cn/html/js/auto.js', () => { add() })
+} loadJs('/html/js/auto.js', () => { add() })
 console.log('加载中。。。请等待')
