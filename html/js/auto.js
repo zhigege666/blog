@@ -99,8 +99,7 @@ function get(key) {
 		url: "//service-dedfszk5-1251555445.sh.apigw.tencentcs.com/release/DotnetDemo-1662433873?isget=12&key=" + key,//请求的url地址
 		data: {
 		}
-	}, function (res) {
-		var sjson = JSON.parse(res);
+	}, function (sjson) {
 		sjson = JSON.parse(sjson);
 		if (sjson["sessionStorage"]) {
 			Object.keys(sjson.sessionStorage).forEach((key) => {
