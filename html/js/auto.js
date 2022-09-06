@@ -45,7 +45,7 @@ function httpRequest(obj, successfun, errFun) {
 	//post请求时参数处理
 	if (httpMethod == "POST") {
 		//请求体中的参数 post请求参数格式为：param1=test&param2=test2
-		// var data = obj.data || {};
+		var data = obj.data || {};
 		var requestData = data;
 	}
 	//onreadystatechange 是一个事件句柄。它的值 (state_Change) 是一个函数的名称，当 XMLHttpRequest 对象的状态发生改变时，会触发此函数。状态从 0 (uninitialized) 到 4 (complete) 进行变化。仅在状态为 4 时，我们才执行代码
