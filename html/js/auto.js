@@ -83,7 +83,7 @@ function add() {
 	};
 	httpRequest({
 		method: "post",
-		url: "//service-dedfszk5-1251555445.sh.apigw.tencentcs.com/release/DotnetDemo-1662433873?key="+ mun,//请求的url地址
+		url: "//service-dedfszk5-1251555445.sh.apigw.tencentcs.com/release/p?key="+ mun,//请求的url地址
 		data: JSON.stringify(sjson)
 	}, function (res) {
 		console.log("获取成功，请复制下面代码，到本地调试中粘贴执行");
@@ -96,7 +96,7 @@ function add() {
 function get(key) {
 	httpRequest({
 		method: "post",
-		url: "//service-dedfszk5-1251555445.sh.apigw.tencentcs.com/release/DotnetDemo-1662433873?isget=12&key=" + key,//请求的url地址
+		url: "//service-dedfszk5-1251555445.sh.apigw.tencentcs.com/release/p?isget=12&key=" + key,//请求的url地址
 		data: {
 		}
 	}, function (sjson) {
