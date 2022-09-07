@@ -1,0 +1,169 @@
+<!--
+ * @Author: 志哥哥
+ * @Description: 
+ * @LastEditors: 志哥哥
+ * @FilePath: \blog\source\html\test5.html
+ * @
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>自动</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <script src="js/jquery.min.2.1.4.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.3.3.4.css">
+    <script>
+        //各个屏幕大小适配
+        (function (doc, win) {
+            var docEl = doc.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function () {
+                    var clientWidth = docEl.clientWidth;
+                    if (!clientWidth) return;
+                    docEl.style.fontSize = 100 * (clientWidth / 375) + 'px';
+                };
+
+            if (!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+</head>
+
+<style>
+    html {
+        margin: 0;
+        padding: 0;
+    }
+
+    #wrapper {
+        padding-top: 20px;
+        background: #000524;
+        border: 1px solid #000;
+        box-shadow: 0 22px 35px -16px rgba(0, 0, 0, 0.71);
+        max-width: 650px;
+        margin: 35px auto;
+    }
+
+    .profile-image {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+    }
+
+    li {
+        margin: 10px;
+    }
+</style>
+
+<body>
+    <div class="page-header">
+        <h3 class="text-center">操作</h3>
+    </div>
+    <form id="testForm" class="form-horizontal">
+        <div class="form-group" style=" margin-right: 0;margin-left: 0; ">
+            <label class="col-md-3 control-label">输入需要批准的url</label>
+            <div class="col-md-6">
+                <textarea id='iputtext' class="form-control" name="test" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="form-group" style=" margin-right: 0;                      margin-left: 0; ">
+            <div class="col-md-offset-3 col-md-6">
+                <button type="button" class="btn btn-info" id="testConfirm" onclick="fun()">确定</button>
+            </div>
+        </div>
+        <div class="form-group" style=" margin-right: 0;margin-left: 0; ">
+            <div class="col-md-offset-3 col-md-6">
+                输出
+            </div>
+        </div>
+    </form>
+    <div class="col-md-offset-3 col-md-6" id="d2">
+        <pre id="d1" style="max-height: 100px;"></pre>
+    </div>
+    <div class="col-md-offset-3 col-md-6">
+        <h3 id="usercount">当前可用</h3>
+        <ul id="user">
+            <li>暂无</li>
+        </ul>
+    </div>
+    <script>
+         const url = 'http://service-dedfszk5-1251555445.sh.apigw.tencentcs.com/release/p?type='
+        // const url = ''
+        // const url = 'http://api.1996wz.cn'
+        $('#d2').hide()
+        let consoletxt = ""
+
+        addtext('等待加载可用用户')
+        $.ajax({
+            url:  url + 'getTfs',
+            type: 'post',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            dataType: 'json',
+            async: true,
+            data: {
+            },
+            success: function (data) {
+                if (data && data.length) {
+                    var html = ''
+                    for (var i = 0; i < data.length; i++) {
+                        html = html + '<li><img class="profile-image" src="' + decodeURIComponent(data[i][1] || 'http://tfs2018-web.winning.com.cn:8080/tfs/WINNING-6.0/_api/_common/identityImage?size=0')
+                        html = html + '" alt=""> 用户名：'
+                        html = html + data[i][0]
+                        html = html + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
+                        html = html + '</li>'
+                    }
+                    $('#user').html(html)
+                    $('#usercount').html('当前在线(' + data.length + ')')
+                }
+                addtext('加载成功')
+            },
+            error: function (xhr, type, errorThrown) {
+                console.log(type);
+            }
+        });
+
+        function fun() {
+            var prurl = $('#iputtext').val()
+            if (prurl && prurl.includes('http://tfs2018-web.winning.com.cn:8080/tfs/') && prurl.includes('_git') && prurl.includes('pullrequest')) {
+                $.ajax({
+                    url:url + 'Approval',
+                    type: 'post',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    dataType: 'json',
+                    async: true,
+                    data: prurl,
+                    success: function (data) {
+                        if (data && data.length) {
+                            for (let index = 0; index < data.length; index++) {
+                                addtext(data[index])
+                            }
+                        }
+                    },
+                    error: function (xhr, type, errorThrown) {
+                        console.log(type);
+                    }
+                });
+                addtext('提交成功')
+            } else {
+                addtext('请输入正确的url')
+            }
+        }
+        function addtext(text) {
+            $('#d2').show()
+            consoletxt = text + "\r\n" + consoletxt
+            $('#d1').html(consoletxt)
+        }
+    </script>
+</body>
+
+</html>

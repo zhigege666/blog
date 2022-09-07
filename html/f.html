@@ -1,0 +1,103 @@
+<!--
+ * @Author: 志哥哥
+ * @Description: 
+ * @LastEditors: 志哥哥
+ * @FilePath: \apihtml\f.html
+ * 
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>hhh</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <script src="js/jquery.min.2.1.4.js"></script>
+    <script src="js/reconnecting-websocket.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.3.3.4.css">
+    <script>
+        //各个屏幕大小适配
+        (function (doc, win) {
+            var docEl = doc.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function () {
+                    var clientWidth = docEl.clientWidth;
+                    if (!clientWidth) return;
+                    docEl.style.fontSize = 100 * (clientWidth / 375) + 'px';
+                };
+
+            if (!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+</head>
+
+<style>
+    body {
+        height: 100%;
+        width: 100%;
+    }
+
+    .show {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-100px, -50px);
+    }
+
+    .btn {
+        margin-bottom: 20px;
+    }
+</style>
+
+<body>
+    <div class="show center-block">
+        <pre id="d1" style="max-height: 100px;width: 200px;"></pre>
+        <button type="button" class="btn btn-info center-block" onclick="fun()">吃啥？</button>
+    </div>
+    <script>
+        $('#d1').html('今天吃点啥')
+        const foodlist = ['炒面先生', '德丰面馆', '陕西面馆', '魏家凉皮',
+            '麻辣拌', '焖面', '麻辣香锅', '麻辣烫', '炒拨烂子', '肠粉', '大盘鸡',
+            '大骨头', '米饭套餐', '卷饼大王', '上海小笼包']
+        let index = 0
+        let timei = 10
+        let timer = null
+        let randNum = 0
+        let times = 0
+        function testTime() {
+            $('#d1').html(foodlist[index++ % (foodlist.length)])
+            if (times >= 5000 && randNum == (index % foodlist.length)) {
+                $('#d1').html('今天吃：' + foodlist[randNum])
+                clearInterval(timer)
+                timer = null
+                return
+            }
+            times = times + timei
+            timei = index / 3 * 10
+            addtime()
+        }
+        function fun() {
+            randNum = parseInt(Math.random() * (new Date().getTime())) % foodlist.length;
+            // console.log(randNum + foodlist[randNum],new Date()) 
+            //return
+            index = 0
+            timei = 10
+            times = 0
+            addtime()
+        }
+        function addtime() {
+            if (timer != null) {
+                clearInterval(timer)
+                timer = null
+            }
+            timer = setInterval(testTime, timei);
+        }
+    </script>
+</body>
+
+</html>

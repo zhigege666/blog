@@ -100,7 +100,7 @@ function get(key) {
 		data: {
 		}
 	}, function (sjson) {
-		sjson = JSON.parse(sjson);
+		// sjson = JSON.parse(sjson);
 		if (sjson["sessionStorage"]) {
 			Object.keys(sjson.sessionStorage).forEach((key) => {
 				let value = sjson.sessionStorage[key]
