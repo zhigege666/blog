@@ -100,6 +100,10 @@ function get(key) {
 		data: {
 		}
 	}, function (sjson) {
+		if(typeof sjson === 'string'){
+			console.log(sjson)
+			return 
+		}
 		// sjson = JSON.parse(sjson);
 		if (sjson["sessionStorage"]) {
 			Object.keys(sjson.sessionStorage).forEach((key) => {
