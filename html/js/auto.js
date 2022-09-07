@@ -100,11 +100,11 @@ function get(key) {
 		data: {
 		}
 	}, function (sjson) {
-		if(typeof sjson === 'string'){
+		if(sjson === '数据已被删除、请重新复制'){
 			console.log(sjson)
 			return 
 		}
-		// sjson = JSON.parse(sjson);
+		sjson = JSON.parse(sjson);
 		if (sjson["sessionStorage"]) {
 			Object.keys(sjson.sessionStorage).forEach((key) => {
 				let value = sjson.sessionStorage[key]
