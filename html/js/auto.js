@@ -1,22 +1,34 @@
-//obj ：{method:"get",url:"",data:{}};
-/**
- * 拼接对象为请求字符串
- * @param {Object} obj - 待拼接的对象
- * @returns {string} - 拼接成的请求字符串
- */
-function encodeSearchParams(obj) {
-	var params = []
-
-	Object.keys(obj).forEach((key) => {
-		let value = obj[key]
-		// 如果值为undefined我们将其置空
-		if (typeof value === 'undefined') {
-			value = ''
+// 获取当前下的url
+function getRelativeUrl() {
+    var arraytemp = getSplitUrl();
+    var urlNum = arraytemp[0].lastIndexOf("/");
+    if (urlNum > 0 && arraytemp[0].length > urlNum) {
+        return arraytemp[0].substring(0, urlNum + 1).replace('http:','');
+    } else {
+        return arraytemp[0].replace('http:','');
+    }
+}
+function getQuery(query){
+    var arraytemp = getSplitUrl();
+	try{
+		if(arraytemp.length>1){
+			const array = arraytemp[1].split('&')
+			for (let index = 0; index < array.length; index++) {
+				const element = array[index].split('=');
+				if(element[0]===query)
+					return element[1]
+			}
 		}
-		// 对于需要编码的文本（比如说中文）我们要进行编码
-		params.push([key, encodeURIComponent(value)].join('='))
-	})
-	return params.join('&')
+		return ''
+	}catch {
+		return ''
+	}
+}
+// 获取当前外部引入script里的src路径
+function getSplitUrl() {
+    var js = document.getElementsByTagName("script");
+    var arraytemp = js[js.length - 1].src.split('?');
+    return arraytemp;
 }
 
 function httpRequest(obj, successfun, errFun) {
@@ -74,6 +86,34 @@ function httpRequest(obj, successfun, errFun) {
 		xmlHttp.send(requestData);
 	}
 }
+function addData(mun,data){
+	return new Promise((resolve, reject) => {
+		httpRequest({
+			method: "post",
+			url: "//service-dedfszk5-1251555445.sh.apigw.tencentcs.com/release/p?key="+ mun,//请求的url地址
+			data: JSON.stringify(data)
+		}, function (res) {
+			resolve(res)
+		}, function (err) {
+			reject(err);
+		});
+    })
+}
+
+function getData(key){
+	return new Promise((resolve, reject) => {
+		httpRequest({
+			method: "post",
+			url: "//service-dedfszk5-1251555445.sh.apigw.tencentcs.com/release/p?isget=12&key=" + key,//请求的url地址
+			data: {}
+		}, function (res) {
+			resolve(res)
+		}, function (err) {
+			reject(err);
+		});
+    })
+}
+
 function add() {
 	var mun = new Date().getTime();
 	var sjson = {
@@ -81,30 +121,27 @@ function add() {
 		localStorage: window.localStorage,
 		cookie: document.cookie,
 	};
-	httpRequest({
-		method: "post",
-		url: "//service-dedfszk5-1251555445.sh.apigw.tencentcs.com/release/p?key="+ mun,//请求的url地址
-		data: JSON.stringify(sjson)
-	}, function (res) {
+	addData(mun,sjson).then((res)=>{
 		console.log("获取成功，请复制下面代码，到本地调试中粘贴执行");
-		console.log('function loadJs(url,callback){var script=document.createElement("script");script.type="text/javascript";if(typeof(callback)!="undefined"){if(script.readyState){script.onreadystatechange=function(){if(script.readyState=="loaded"||script.readyState=="complete"){script.onreadystatechange=null;callback()}}}else{script.onload=function(){callback()}}}script.src=url;document.body.appendChild(script)}loadJs("//api.1996wz.cn/html/js/auto.js",()=>{get("' + mun + '")})')
-	}, function () {
+		console.log("m=document.createElement('script');m.setAttribute('type','text/javascript');m.setAttribute('src','"+getRelativeUrl()+"auto.js?get="+mun+"');document.body.appendChild(m);")
+		// console.log('function loadJs(url,callback){var script=document.createElement("script");script.type="text/javascript";if(typeof(callback)!="undefined"){if(script.readyState){script.onreadystatechange=function(){if(script.readyState=="loaded"||script.readyState=="complete"){script.onreadystatechange=null;callback()}}}else{script.onload=function(){callback()}}}script.src=url;document.body.appendChild(script)}loadJs("'+getRelativeUrl()+'auto.js",()=>{get("' + mun + '")})')
+	}).catch((error)=>{
 		console.log("请求失败");
-	});
+	})
 }
 
 function get(key) {
-	httpRequest({
-		method: "post",
-		url: "//service-dedfszk5-1251555445.sh.apigw.tencentcs.com/release/p?isget=12&key=" + key,//请求的url地址
-		data: {
-		}
-	}, function (sjson) {
-		if(sjson === '数据已被删除、请重新复制'){
-			console.log(sjson)
+	getData(key).then((sjson)=>{
+		if(typeof sjson === "string")
+			sjson = JSON.parse(sjson);
+		if(sjson.isError){
+			console.log(sjson.data)
 			return 
 		}
-		sjson = JSON.parse(sjson);
+		// if(sjson === '数据已被删除、请重新复制'){
+		// 	console.log(sjson)
+		// 	return 
+		// }
 		if (sjson["sessionStorage"]) {
 			Object.keys(sjson.sessionStorage).forEach((key) => {
 				let value = sjson.sessionStorage[key]
@@ -130,7 +167,22 @@ function get(key) {
 			}
 		}	
 		console.log("写入成功,请刷新页面");
-	}, function () {
+	}).catch((error)=>{
 		console.log("请求失败");
-	});
+	})
 }
+
+
+function auto(){
+	const key = getQuery('get')
+	if(key){
+		get(key)
+	}
+
+	const isadd = getQuery('add')
+	if(isadd){
+		add()
+	}
+}
+
+auto()
