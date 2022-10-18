@@ -1,34 +1,34 @@
 // 获取当前下的url
 function getRelativeUrl() {
-    var arraytemp = getSplitUrl();
-    var urlNum = arraytemp[0].lastIndexOf("/");
-    if (urlNum > 0 && arraytemp[0].length > urlNum) {
-        return arraytemp[0].substring(0, urlNum + 1).replace('http:','');
-    } else {
-        return arraytemp[0].replace('http:','');
-    }
+	var arraytemp = getSplitUrl();
+	var urlNum = arraytemp[0].lastIndexOf("/");
+	if (urlNum > 0 && arraytemp[0].length > urlNum) {
+		return arraytemp[0].substring(0, urlNum + 1).replace('http:', '');
+	} else {
+		return arraytemp[0].replace('http:', '');
+	}
 }
-function getQuery(query){
-    var arraytemp = getSplitUrl();
-	try{
-		if(arraytemp.length>1){
+function getQuery(query) {
+	var arraytemp = getSplitUrl();
+	try {
+		if (arraytemp.length > 1) {
 			const array = arraytemp[1].split('&')
 			for (let index = 0; index < array.length; index++) {
 				const element = array[index].split('=');
-				if(element[0]===query)
+				if (element[0] === query)
 					return element[1]
 			}
 		}
 		return ''
-	}catch {
+	} catch {
 		return ''
 	}
 }
 // 获取当前外部引入script里的src路径
 function getSplitUrl() {
-    var js = document.getElementsByTagName("script");
-    var arraytemp = js[js.length - 1].src.split('?');
-    return arraytemp;
+	var js = document.getElementsByTagName("script");
+	var arraytemp = js[js.length - 1].src.split('?');
+	return arraytemp;
 }
 
 function httpRequest(obj, successfun, errFun) {
@@ -86,21 +86,21 @@ function httpRequest(obj, successfun, errFun) {
 		xmlHttp.send(requestData);
 	}
 }
-function addData(mun,data){
+function addData(mun, data) {
 	return new Promise((resolve, reject) => {
 		httpRequest({
 			method: "post",
-			url: "//service-dedfszk5-1251555445.sh.apigw.tencentcs.com/release/p?key="+ mun,//请求的url地址
+			url: "//service-dedfszk5-1251555445.sh.apigw.tencentcs.com/release/p?key=" + mun,//请求的url地址
 			data: JSON.stringify(data)
 		}, function (res) {
 			resolve(res)
 		}, function (err) {
 			reject(err);
 		});
-    })
+	})
 }
 
-function getData(key){
+function getData(key) {
 	return new Promise((resolve, reject) => {
 		httpRequest({
 			method: "post",
@@ -111,7 +111,7 @@ function getData(key){
 		}, function (err) {
 			reject(err);
 		});
-    })
+	})
 }
 
 function add() {
@@ -121,22 +121,48 @@ function add() {
 		localStorage: window.localStorage,
 		cookie: document.cookie,
 	};
-	addData(mun,sjson).then((res)=>{
+	addData(mun, sjson).then((res) => {
+		const code = "m=document.createElement('script');m.setAttribute('type','text/javascript');m.setAttribute('src','" + getRelativeUrl() + "auto.js?get=" + mun + "');document.body.appendChild(m);"
+		copytext(code)
 		console.log("获取成功，请复制下面代码，到本地调试中粘贴执行");
-		console.log("m=document.createElement('script');m.setAttribute('type','text/javascript');m.setAttribute('src','"+getRelativeUrl()+"auto.js?get="+mun+"');document.body.appendChild(m);")
+		console.log(code)
 		// console.log('function loadJs(url,callback){var script=document.createElement("script");script.type="text/javascript";if(typeof(callback)!="undefined"){if(script.readyState){script.onreadystatechange=function(){if(script.readyState=="loaded"||script.readyState=="complete"){script.onreadystatechange=null;callback()}}}else{script.onload=function(){callback()}}}script.src=url;document.body.appendChild(script)}loadJs("'+getRelativeUrl()+'auto.js",()=>{get("' + mun + '")})')
-	}).catch((error)=>{
+	}).catch((error) => {
 		console.log("请求失败");
 	})
 }
+function copytext() {
+	var textArea = document.createElement("textarea")
+	textArea.style.position = 'fixed'
+	textArea.style.top = '0'
+	textArea.style.left = '0'
+	textArea.style.width = '2em'
+	textArea.style.height = '2em'
+	textArea.style.padding = '0'
+	textArea.style.border = 'none'
+	textArea.style.outline = 'none'
+	textArea.style.boxShadow = 'none'
+	textArea.style.background = 'transparent'
+	textArea.value = this.list[0].orderId
+	document.body.appendChild(textArea)
+	textArea.select()
+	try {
+		var successful = document.execCommand('copy')
+		if (successful) {
+			alert("复制到粘贴板成功，请到本地调试中粘贴执行")
+		}
+	} catch (err) {
+	}
+	document.body.removeChild(textArea)
+}
 
 function get(key) {
-	getData(key).then((sjson)=>{
-		if(typeof sjson === "string")
+	getData(key).then((sjson) => {
+		if (typeof sjson === "string")
 			sjson = JSON.parse(sjson);
-		if(sjson.isError){
+		if (sjson.isError) {
 			console.log(sjson.data)
-			return 
+			return
 		}
 		// if(sjson === '数据已被删除、请重新复制'){
 		// 	console.log(sjson)
@@ -158,29 +184,29 @@ function get(key) {
 		}
 		if (sjson.cookie) {
 			var href = window.location.href.split("/")[2].split(":")[0]
-		
+
 			var cookies = sjson.cookie.split(";")
 			if (cookies && cookies.length) {
 				cookies.forEach(e => {
 					document.cookie = e.replace(/(^\s*)|(\s*$)/g, "") + ";  domain=" + href + "; path=/;";
 				})
 			}
-		}	
+		}
 		console.log("写入成功,请刷新页面");
-	}).catch((error)=>{
+	}).catch((error) => {
 		console.log("请求失败");
 	})
 }
 
 
-function auto(){
+function auto() {
 	const key = getQuery('get')
-	if(key){
+	if (key) {
 		get(key)
 	}
 
 	const isadd = getQuery('add')
-	if(isadd){
+	if (isadd) {
 		add()
 	}
 }
