@@ -131,7 +131,7 @@ function add() {
 		console.log("请求失败");
 	})
 }
-function copytext() {
+function copytext(text) {
 	var textArea = document.createElement("textarea")
 	textArea.style.position = 'fixed'
 	textArea.style.top = '0'
@@ -143,7 +143,7 @@ function copytext() {
 	textArea.style.outline = 'none'
 	textArea.style.boxShadow = 'none'
 	textArea.style.background = 'transparent'
-	textArea.value = this.list[0].orderId
+	textArea.value = text
 	document.body.appendChild(textArea)
 	textArea.select()
 	try {
