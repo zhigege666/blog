@@ -36,9 +36,15 @@
  * @Description: 导入导出Cookie
  * @LastEditors: 志哥哥
  * @FilePath: \blog\source\html\js\auto.js
- * 
- */
 
+ 获取缓存
+ m=document.createElement('script');m.setAttribute('type','text/javascript');m.setAttribute('src','//api.1996wz.cn/html/js/auto.js?add=a');document.body.appendChild(m);
+
+ 获取缓存不弹alert
+ m=document.createElement('script');m.setAttribute('type','text/javascript');m.setAttribute('src','//api.1996wz.cn/html/js/auto.js?add=a&&isAlert=a');document.body.appendChild(m);
+
+ */
+let isAlert = true
 // 获取当前下的url
 function getRelativeUrl() {
 	var arraytemp = getSplitUrl();
@@ -195,7 +201,9 @@ function copytext(text) {
 				document.body.removeChild(textArea)
 				resolve(true)
 				console.log("复制到粘贴板成功，请到本地调试中粘贴执行");
-				alert("复制到粘贴板成功，请到本地调试中粘贴执行")
+				if(isAlert){
+					alert("复制到粘贴板成功，请到本地调试中粘贴执行")
+				}
 				return
 			}
 		} catch (err) {
@@ -250,6 +258,10 @@ function auto() {
 	const isadd = getQuery('add')
 	if (isadd) {
 		add()
+	}
+	const _isAlert = getQuery('isAlert')
+	if (_isAlert) {
+		isAlert = false
 	}
 }
 
