@@ -33,7 +33,7 @@
  *         , , ,,,:,,::::::::iiiiiiiiii:,:,:::::::::iiir;ri7vL77rrirri::
  *          :,, , ::::::::i:::i:::i:i::,,,,,:,::i:i:::iir;@Secbone.ii:::
  * @Author: 志哥哥
- * @Description: 导入到处Cookie
+ * @Description: 导入导出Cookie
  * @LastEditors: 志哥哥
  * @FilePath: \blog\source\html\js\auto.js
  * 
