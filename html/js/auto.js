@@ -121,39 +121,48 @@ function add() {
 		localStorage: window.localStorage,
 		cookie: document.cookie,
 	};
-	addData(mun, sjson).then((res) => {
+	addData(mun, sjson).then(async (res) => {
 		const code = "m=document.createElement('script');m.setAttribute('type','text/javascript');m.setAttribute('src','" + getRelativeUrl() + "auto.js?get=" + mun + "');document.body.appendChild(m);"
-		copytext(code)
-		console.log("获取成功，请复制下面代码，到本地调试中粘贴执行");
-		console.log(code)
-		// console.log('function loadJs(url,callback){var script=document.createElement("script");script.type="text/javascript";if(typeof(callback)!="undefined"){if(script.readyState){script.onreadystatechange=function(){if(script.readyState=="loaded"||script.readyState=="complete"){script.onreadystatechange=null;callback()}}}else{script.onload=function(){callback()}}}script.src=url;document.body.appendChild(script)}loadJs("'+getRelativeUrl()+'auto.js",()=>{get("' + mun + '")})')
+		const isconsole = await copytext(code)
+		if(!isconsole){
+			console.log("获取成功，请复制下面代码，到本地调试中粘贴执行");
+			console.log(code)
+		}
 	}).catch((error) => {
 		console.log("请求失败");
 	})
 }
 function copytext(text) {
-	var textArea = document.createElement("textarea")
-	textArea.style.position = 'fixed'
-	textArea.style.top = '0'
-	textArea.style.left = '0'
-	textArea.style.width = '2em'
-	textArea.style.height = '2em'
-	textArea.style.padding = '0'
-	textArea.style.border = 'none'
-	textArea.style.outline = 'none'
-	textArea.style.boxShadow = 'none'
-	textArea.style.background = 'transparent'
-	textArea.value = text
-	document.body.appendChild(textArea)
-	textArea.select()
-	try {
-		var successful = document.execCommand('copy')
-		if (successful) {
-			alert("复制到粘贴板成功，请到本地调试中粘贴执行")
+	return new Promise((resolve) => {
+		var textArea = document.createElement("textarea")
+		textArea.style.position = 'fixed'
+		textArea.style.top = '0'
+		textArea.style.left = '0'
+		textArea.style.width = '2em'
+		textArea.style.height = '2em'
+		textArea.style.padding = '0'
+		textArea.style.border = 'none'
+		textArea.style.outline = 'none'
+		textArea.style.boxShadow = 'none'
+		textArea.style.background = 'transparent'
+		textArea.value = text
+		document.body.appendChild(textArea)
+		textArea.select()
+		try {
+			var successful = document.execCommand('copy')
+			if (successful) {
+				document.body.removeChild(textArea)
+				resolve(true)
+				console.log("复制到粘贴板成功，请到本地调试中粘贴执行");
+				alert("复制到粘贴板成功，请到本地调试中粘贴执行")
+				return
+			}
+		} catch (err) {
 		}
-	} catch (err) {
-	}
-	document.body.removeChild(textArea)
+		document.body.removeChild(textArea)
+		resolve(false)
+	})
+
 }
 
 function get(key) {
@@ -164,27 +173,20 @@ function get(key) {
 			console.log(sjson.data)
 			return
 		}
-		// if(sjson === '数据已被删除、请重新复制'){
-		// 	console.log(sjson)
-		// 	return 
-		// }
 		if (sjson["sessionStorage"]) {
 			Object.keys(sjson.sessionStorage).forEach((key) => {
 				let value = sjson.sessionStorage[key]
-				// 对于需要编码的文本（比如说中文）我们要进行编码
 				sessionStorage.setItem(key, value);
 			})
 		}
 		if (sjson.localStorage) {
 			Object.keys(sjson.localStorage).forEach((key) => {
 				let value = sjson.localStorage[key]
-				// 对于需要编码的文本（比如说中文）我们要进行编码
 				localStorage.setItem(key, value);
 			})
 		}
 		if (sjson.cookie) {
 			var href = window.location.href.split("/")[2].split(":")[0]
-
 			var cookies = sjson.cookie.split(";")
 			if (cookies && cookies.length) {
 				cookies.forEach(e => {
@@ -197,7 +199,6 @@ function get(key) {
 		console.log("请求失败");
 	})
 }
-
 
 function auto() {
 	const key = getQuery('get')
