@@ -44,7 +44,7 @@
  m=document.createElement('script');m.setAttribute('type','text/javascript');m.setAttribute('src','//api.1996wz.cn/html/js/auto.js?add=a&&isAlert=a');document.body.appendChild(m);
 
  */
-let isAlert = true
+isAlert = true
 // 获取当前下的url
 function getRelativeUrl() {
 	var arraytemp = getSplitUrl();
