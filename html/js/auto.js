@@ -178,7 +178,7 @@ function add(_isAlert) {
 		console.log("请求失败");
 	})
 }
-function copytext(text) {
+function copytext(text,_isAlert) {
 	return new Promise((resolve) => {
 		var textArea = document.createElement("textarea")
 		textArea.style.position = 'fixed'
