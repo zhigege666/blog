@@ -204,12 +204,13 @@ function copytext(text, _isAlert = true) {
 					alert("复制到粘贴板成功，请到本地调试中粘贴执行")
 				}
 				return
+			}else{
+				console.log("复制到粘贴板失败，请到手动复制粘贴执行");
 			}
 		} catch (err) {
 			console.error(err)
 		}
 		document.body.removeChild(textArea)
-		console.log("复制到粘贴板失败，请到手动复制粘贴执行");
 		resolve(false)
 	})
 
