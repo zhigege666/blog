@@ -206,6 +206,7 @@ function copytext(text, _isAlert = true) {
 				return
 			}
 		} catch (err) {
+			console.error(err)
 		}
 		document.body.removeChild(textArea)
 		console.log("复制到粘贴板失败，请到手动复制粘贴执行");
