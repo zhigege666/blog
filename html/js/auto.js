@@ -160,7 +160,7 @@ function getData(key) {
 	})
 }
 
-function add(_isAlert = true) {
+function add(isAlert) {
 	var mun = new Date().getTime();
 	var sjson = {
 		sessionStorage: window.sessionStorage,
@@ -169,7 +169,7 @@ function add(_isAlert = true) {
 	};
 	addData(mun, sjson).then(async (res) => {
 		const code = "m=document.createElement('script');m.setAttribute('type','text/javascript');m.setAttribute('src','" + getRelativeUrl() + "auto.js?get=" + mun + "');document.body.appendChild(m);"
-		const isconsole = await copytext(code,_isAlert)
+		const isconsole = await copytext(code, isAlert)
 		if (!isconsole) {
 			console.log("获取成功，请复制下面代码，到本地调试中粘贴执行");
 			console.log(code)
@@ -178,18 +178,7 @@ function add(_isAlert = true) {
 		console.log("请求失败");
 	})
 }
-async function  copytext(text, _isAlert = true) {
-	let res = await copy(text, _isAlert)
-	if(res)
-	return res
-	for (let index = 0; index < 10; index++) {
-		res = await copy(text, _isAlert)
-		if(res)
-			return res
-	}
-}
-
-function copy(text, _isAlert = true) {
+function copytext(text,isAlert =true) {
 	return new Promise((resolve) => {
 		var textArea = document.createElement("textarea")
 		textArea.style.position = 'fixed'
@@ -211,19 +200,17 @@ function copy(text, _isAlert = true) {
 				document.body.removeChild(textArea)
 				resolve(true)
 				console.log("复制到粘贴板成功，请到本地调试中粘贴执行");
-				if(_isAlert){
+				if(isAlert){
 					alert("复制到粘贴板成功，请到本地调试中粘贴执行")
 				}
 				return
-			}else{
-				console.log("复制到粘贴板失败，请到手动复制粘贴执行");
 			}
 		} catch (err) {
-			console.error(err)
 		}
 		document.body.removeChild(textArea)
 		resolve(false)
 	})
+
 }
 
 function get(key) {
@@ -262,14 +249,14 @@ function get(key) {
 }
 
 function auto() {
-	const _isAlert = getQuery('isAlert') ? false : true
+	const isAlert = getQuery('isAlert') ? false : true
 	const key = getQuery('get')
 	if (key) {
 		get(key)
 	}
 	const isadd = getQuery('add')
 	if (isadd) {
-		add(_isAlert)
+		add(isAlert)
 	}
 }
 
