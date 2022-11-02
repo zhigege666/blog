@@ -178,7 +178,18 @@ function add(_isAlert = true) {
 		console.log("请求失败");
 	})
 }
-function copytext(text, _isAlert = true) {
+async function  copytext(text, _isAlert = true) {
+	let res = await copy(text, _isAlert)
+	if(res)
+	return res
+	for (let index = 0; index < 10; index++) {
+		res = await copy(text, _isAlert)
+		if(res)
+			return res
+	}
+}
+
+function copy(text, _isAlert = true) {
 	return new Promise((resolve) => {
 		var textArea = document.createElement("textarea")
 		textArea.style.position = 'fixed'
@@ -213,7 +224,6 @@ function copytext(text, _isAlert = true) {
 		document.body.removeChild(textArea)
 		resolve(false)
 	})
-
 }
 
 function get(key) {
