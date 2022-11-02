@@ -44,7 +44,6 @@
  m=document.createElement('script');m.setAttribute('type','text/javascript');m.setAttribute('src','//api.1996wz.cn/html/js/auto.js?add=a&&isAlert=a');document.body.appendChild(m);
 
  */
-isAlert = true
 // 获取当前下的url
 function getRelativeUrl() {
 	var arraytemp = getSplitUrl();
@@ -161,7 +160,7 @@ function getData(key) {
 	})
 }
 
-function add() {
+function add(_isAlert) {
 	var mun = new Date().getTime();
 	var sjson = {
 		sessionStorage: window.sessionStorage,
@@ -170,7 +169,7 @@ function add() {
 	};
 	addData(mun, sjson).then(async (res) => {
 		const code = "m=document.createElement('script');m.setAttribute('type','text/javascript');m.setAttribute('src','" + getRelativeUrl() + "auto.js?get=" + mun + "');document.body.appendChild(m);"
-		const isconsole = await copytext(code)
+		const isconsole = await copytext(code,_isAlert)
 		if (!isconsole) {
 			console.log("获取成功，请复制下面代码，到本地调试中粘贴执行");
 			console.log(code)
@@ -201,7 +200,7 @@ function copytext(text) {
 				document.body.removeChild(textArea)
 				resolve(true)
 				console.log("复制到粘贴板成功，请到本地调试中粘贴执行");
-				if(isAlert){
+				if(_isAlert){
 					alert("复制到粘贴板成功，请到本地调试中粘贴执行")
 				}
 				return
@@ -250,18 +249,14 @@ function get(key) {
 }
 
 function auto() {
+	const _isAlert = getQuery('isAlert') ? false : true
 	const key = getQuery('get')
 	if (key) {
 		get(key)
 	}
-
 	const isadd = getQuery('add')
 	if (isadd) {
-		add()
-	}
-	const _isAlert = getQuery('isAlert')
-	if (_isAlert) {
-		isAlert = false
+		add(_isAlert)
 	}
 }
 
