@@ -160,7 +160,7 @@ function getData(key) {
 	})
 }
 
-function add(_isAlert) {
+function add(_isAlert = true) {
 	var mun = new Date().getTime();
 	var sjson = {
 		sessionStorage: window.sessionStorage,
@@ -178,7 +178,7 @@ function add(_isAlert) {
 		console.log("请求失败");
 	})
 }
-function copytext(text,_isAlert) {
+function copytext(text, _isAlert = true) {
 	return new Promise((resolve) => {
 		var textArea = document.createElement("textarea")
 		textArea.style.position = 'fixed'
@@ -208,6 +208,7 @@ function copytext(text,_isAlert) {
 		} catch (err) {
 		}
 		document.body.removeChild(textArea)
+		console.log("复制到粘贴板失败，请到手动复制粘贴执行");
 		resolve(false)
 	})
 
