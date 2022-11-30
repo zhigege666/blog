@@ -244,6 +244,7 @@ function get(key) {
 			}
 		}
 		console.log("写入成功,请刷新页面");
+		console.log('%c说明文档 https://www.yuque.com/zhigege-lxf5o/pueg69/tqqmes','color:red;')
 	}).catch((error) => {
 		console.log("请求失败");
 	})
