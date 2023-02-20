@@ -154,7 +154,7 @@ function getData(key) {
 			data: {}
 		}, function (res) {
 			if(res.errorCode === -1){
-				alert('保存失败 大概率本地缓存过多 需要删除几个键值对 '+ res.errorMessage)
+				alert('保存失败 大概率本地缓存过多 需要刷新下页面重新获取或者删除几个键值对 '+ res.errorMessage)
 				reject(res);
 			}else
 			resolve(res)
@@ -179,7 +179,7 @@ function add(isAlert) {
 			console.log(code)
 		}
 	}).catch((error) => {
-		console.log('保存失败 大概率本地缓存过多 需要删除几个键值对 '+ error.errorMessage);
+		console.log('保存失败 大概率本地缓存过多 需要刷新下页面重新获取或者删除几个键值对 '+ error.errorMessage);
 	})
 }
 
