@@ -153,6 +153,10 @@ function getData(key) {
 			url: "//service-dedfszk5-1251555445.sh.apigw.tencentcs.com/release/p?isget=12&key=" + key,//请求的url地址
 			data: {}
 		}, function (res) {
+			if(res.errorCode === -1){
+				alert('保存失败 大概率本地缓存过多 需要删除几个键值对 '+ res.errorMessage)
+				reject(res);
+			}else
 			resolve(res)
 		}, function (err) {
 			reject(err);
@@ -175,7 +179,7 @@ function add(isAlert) {
 			console.log(code)
 		}
 	}).catch((error) => {
-		console.log("请求失败");
+		console.log('保存失败 大概率本地缓存过多 需要删除几个键值对 '+ error.errorMessage);
 	})
 }
 
