@@ -138,7 +138,7 @@ function addData(mun, data) {
 			method: "post",
 			url: "//service-dedfszk5-1251555445.sh.apigw.tencentcs.com/release/p?key=" + mun,//请求的url地址
 			data: JSON.stringify(data)
-		}, function (res) {
+		}, function (res) {			
 			resolve(res)
 		}, function (err) {
 			reject(err);
@@ -172,6 +172,10 @@ function add(isAlert) {
 		cookie: document.cookie,
 	};
 	addData(mun, sjson).then(async (res) => {
+		if(res.errorCode){
+			alert("获取失败 可能由于缓存太多导致的 请删除无用的sessionStorage键值对或者注销重新登录获取 " + res.errorMessage);
+			return
+		}
 		const code = "m=document.createElement('script');m.setAttribute('type','text/javascript');m.setAttribute('src','" + getRelativeUrl() + "auto.js?get=" + mun + "');document.body.appendChild(m);"
 		const isconsole = await copytext(code, isAlert)
 		if (!isconsole) {
@@ -179,7 +183,7 @@ function add(isAlert) {
 			console.log(code)
 		}
 	}).catch((error) => {
-		console.log('保存失败 大概率本地缓存过多 需要刷新下页面重新获取或者删除几个键值对 '+ error.errorMessage);
+		console.log('保存失败 大概率本地缓存过多 需要刷新下页面重新获取或者删除几个键值对或者注销重新登录获取 '+ error.errorMessage);
 	})
 }
 
