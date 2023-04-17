@@ -2720,7 +2720,7 @@ function unzipFun(b64Data) {
 	}
 
 }
-// 压缩
+// 压缩  
 function zipFun(str, name) {
 	var binaryString = window.pako.deflate(str, {
 		to: "string",
