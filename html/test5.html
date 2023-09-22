@@ -103,6 +103,9 @@
         $.ajax({
             url:  url,
             type: 'post',
+            headers: {
+                        'Content-Type': 'application/json',
+                    },
             contentType: 'application/json',  // 设置请求头
             dataType: 'json',
             async: true,
@@ -140,10 +143,10 @@
                     },
                     dataType: 'json',
                     async: true,
-                    data: {
+                    data: JSON.stringify({
                         type:'Approval',
                         url:prurl
-                    },
+                    }),
                     success: function (data) {
                         if (data && data.length) {
                             for (let index = 0; index < data.length; index++) {
