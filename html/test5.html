@@ -103,14 +103,12 @@
         $.ajax({
             url:  url,
             type: 'post',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            contentType: 'application/json',  // 设置请求头
             dataType: 'json',
             async: true,
-            data: {
+            data: JSON.stringify({
                 type: 'getTfs'
-            },
+            }),
             success: function (data) {
                 if (data && data.length) {
                     var html = ''
