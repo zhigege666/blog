@@ -2,7 +2,7 @@
  * @Author: 志哥哥
  * @Description: 
  * @LastEditors: 志哥哥
- * @FilePath: \blog\source\html\test5.html
+ * @FilePath: \blog\public\html\test5.html
  * @
 -->
 <!DOCTYPE html>
@@ -93,7 +93,7 @@
         </ul>
     </div>
     <script>
-         const url = 'https://service-dedfszk5-1251555445.sh.apigw.tencentcs.com/release/p?type='
+         const url = 'https://my-3g2pc0ib6cb37c43-1251555445.ap-shanghai.app.tcloudbase.com/p'
         // const url = ''
         // const url = 'http://api.1996wz.cn'
         $('#d2').hide()
@@ -101,7 +101,7 @@
 
         addtext('等待加载可用用户')
         $.ajax({
-            url:  url + 'getTfs',
+            url:  url,
             type: 'post',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -109,6 +109,7 @@
             dataType: 'json',
             async: true,
             data: {
+                type: 'getTfs'
             },
             success: function (data) {
                 if (data && data.length) {
@@ -134,14 +135,17 @@
             var prurl = $('#iputtext').val()
             if (prurl && prurl.includes('http://tfs2018-web.winning.com.cn:8080/tfs/') && prurl.includes('_git') && prurl.includes('pullrequest')) {
                 $.ajax({
-                    url:url + 'Approval',
+                    url:url,
                     type: 'post',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
                     dataType: 'json',
                     async: true,
-                    data: prurl,
+                    data: {
+                        type:'Approval',
+                        url:prurl
+                    },
                     success: function (data) {
                         if (data && data.length) {
                             for (let index = 0; index < data.length; index++) {
