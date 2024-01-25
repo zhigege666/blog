@@ -18,7 +18,7 @@
     <script src="js/jquery.min.2.1.4.js"></script>
     <link rel="stylesheet" href="css/bootstrap.3.3.4.css">
     <script>
-        window.location.href='https://service-dedfszk5-1251555445.sh.apigw.tencentcs.com/release/APIGWHtmlDemo-1706187100';
+        //window.location.href='https://service-dedfszk5-1251555445.sh.apigw.tencentcs.com/release/APIGWHtmlDemo-1706187100';
         //各个屏幕大小适配
         (function (doc, win) {
             var docEl = doc.documentElement,
@@ -94,7 +94,7 @@
         </ul>
     </div>
     <script>
-         const url = 'https://my-3g2pc0ib6cb37c43-1251555445.ap-shanghai.app.tcloudbase.com/p'
+         const url = 'https://my-3g2pc0ib6cb37c43-1251555445.ap-shanghai.app.tcloudbase.com/q?type='
         // const url = ''
         // const url = 'http://api.1996wz.cn'
         $('#d2').hide()
@@ -102,17 +102,15 @@
 
         addtext('等待加载可用用户')
         $.ajax({
-            url:  url,
+            url:  url+ 'getTfs',
             type: 'post',
-            headers: {
-                        'Content-Type': 'application/json',
-                    },
+            headers:{
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
             contentType: 'application/json',  // 设置请求头
             dataType: 'json',
             async: true,
-            data: JSON.stringify({
-                type: 'getTfs'
-            }),
+            data: {},
             success: function (data) {
                 if (data && data.length) {
                     var html = ''
@@ -137,17 +135,14 @@
             var prurl = $('#iputtext').val()
             if (prurl && prurl.includes('http://tfs2018-web.winning.com.cn:8080/tfs/') && prurl.includes('_git') && prurl.includes('pullrequest')) {
                 $.ajax({
-                    url:url,
+                    url:url + 'Approval',
                     type: 'post',
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'application/x-www-form-urlencoded',
                     },
                     dataType: 'json',
                     async: true,
-                    data: JSON.stringify({
-                        type:'Approval',
-                        url:prurl
-                    }),
+                    data: prurl,
                     success: function (data) {
                         if (data && data.length) {
                             for (let index = 0; index < data.length; index++) {
